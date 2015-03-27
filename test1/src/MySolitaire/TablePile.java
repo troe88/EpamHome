@@ -15,6 +15,7 @@ class TablePile extends CardPile {
 		top().flip();
 	}
 
+	@Override
 	public boolean canTake(final Card aCard) {
 		if (empty()) {
 			return aCard.isKing();
@@ -24,15 +25,18 @@ class TablePile extends CardPile {
 				&& (aCard.getRank() == topCard.getRank() - 1);
 	}
 
+	@Override
 	public void display(final Graphics g) {
 		stackDisplay(g, top());
 	}
 
+	@Override
 	public boolean includes(final int tx, final int ty) {
 		// don't test bottom of card
 		return x <= tx && tx <= x + Card.width && y <= ty;
 	}
 
+	@Override
 	public void select(final int tx, final int ty) {
 		if (empty()) {
 			return;
@@ -45,23 +49,7 @@ class TablePile extends CardPile {
 			return;
 		}
 
-		// else see if any suit pile can take card
-		topCard = pop();
-		for (int i = 0; i < 4; i++) {
-			if (Solitaire.suitPile[i].canTake(topCard)) {
-				Solitaire.suitPile[i].addCard(topCard);
-				return;
-			}
-		}
-		// else see if any other table pile can take card
-		for (int i = 0; i < 7; i++) {
-			if (Solitaire.tableau[i].canTake(topCard)) {
-				Solitaire.tableau[i].addCard(topCard);
-				return;
-			}
-		}
-		// else put it back on our pile
-		addCard(topCard);
+		suitTakeCard();
 	}
 
 	private int stackDisplay(final Graphics g, final Card aCard) {
