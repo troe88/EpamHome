@@ -23,6 +23,8 @@ public class Solitaire extends Applet {
 	static Map<Integer, CardPile> select_count;
 	static boolean have_select;
 	static Card selected_card;
+	private int _X;
+	private int _Y;
 
 	@Override
 	public void init() {
@@ -78,10 +80,35 @@ public class Solitaire extends Applet {
 	}
 
 	@Override
-	public boolean mouseDown(final Event evt, final int x, final int y) {
+	public boolean mouseMove(final Event evt, final int x, final int y) {
+		_X = x;
+		_Y = y;
+		return true;
+	}
+	
+	@Override
+	public boolean mouseDrag(final Event evt, final int x, final int y) {
+		_X = x;
+		_Y = y;
+//		System.out.println("q");
+		repaint();
+		return true;
+	}
+	
+	@Override
+	public boolean mouseUp(final Event evt, final int x, final int y) {
 		if (have_select) {
 			tryToTransfer(x, y);
 			repaint();
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean mouseDown(final Event evt, final int x, final int y) {
+		if (have_select) {
+//			tryToTransfer(x, y);
+//			repaint();
 			return true;
 
 		} else {
@@ -100,6 +127,10 @@ public class Solitaire extends Applet {
 	public void paint(final Graphics g) {
 		for (int i = 0; i < 13; i++) {
 			allPiles[i].display(g);
+		}
+		if(selected_card != null){
+			System.out.println("z");
+			selected_card.draw(g, _X, _Y);
 		}
 	}
 }

@@ -20,7 +20,7 @@ class DiscardPile extends CardPile {
 			return;
 		}
 		
-		Card card = top();
+		Card card = pop();
 		card.setSelected(true);
 		Solitaire.selected_card = card;
 		Solitaire.have_select = true;
