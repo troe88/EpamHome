@@ -29,12 +29,14 @@ public class Solitaire extends Applet {
 			allPiles[2 + i] = suitPile[i] = new SuitPile(15 + 60 * i, 5);
 		}
 		for (int i = 0; i < 7; i++) {
-			allPiles[6 + i] = tableau[i] = new TablePile(5 + 55 * i, 80, i + 1, i);
+			allPiles[6 + i] = tableau[i] = new TablePile(5 + 55 * i, 80, i + 1);
 		}
 	}
 
 	@Override
 	public boolean mouseDown(final Event evt, final int x, final int y) {
+//		System.out.println("mouse_x: " + x);
+//		System.out.println("mouse_y: " + y);
 		for (int i = 0; i < 13; i++) {
 			if (allPiles[i].includes(x, y)) {
 				allPiles[i].select(x, y);

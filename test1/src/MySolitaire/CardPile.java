@@ -11,10 +11,13 @@ class CardPile {
 	protected int x;
 	protected int y;
 	
+	protected int _card_count;
+	
 	CardPile(final int xl, final int yl) {
 		x = xl;
 		y = yl;
 		firstCard = null;
+		_card_count = 0;
 	}
 
 	// the following are sometimes overridden
@@ -22,6 +25,7 @@ class CardPile {
 	public void addCard(final Card aCard) {
 		aCard.link = firstCard;
 		firstCard = aCard;
+		_card_count++;
 	}
 
 	public boolean canTake(final Card aCard) {
@@ -60,8 +64,8 @@ class CardPile {
 	}
 
 	public boolean includes(final int tx, final int ty) {
-		return x <= tx && tx <= x + Card.width && y <= ty
-				&& ty <= y + Card.height;
+		return x <= tx && tx <= x + Card.width &&
+			   y <= ty && ty <= y + Card.height;
 	}
 
 	public Card pop() {
@@ -70,6 +74,7 @@ class CardPile {
 			result = firstCard;
 			firstCard = firstCard.link;
 		}
+		_card_count--;
 		return result;
 	}
 
