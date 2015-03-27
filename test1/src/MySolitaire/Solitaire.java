@@ -78,43 +78,47 @@ public class Solitaire extends Applet {
 		if (have_select) {
 			for (Map.Entry<Integer, CardPile> entry : select_count.entrySet()) {
 				entry.getValue().dropSelect();
-				for (int i = 0; i < 13; i++) {
-					if (allPiles[i].includes(x, y)) {
-						if (allPiles[i].canTake(selected_card)) {
-							Card tmp[] = new Card[entry.getKey()];
-							int count = 0;
-							while (count != entry.getKey()) {
-								tmp[count] = entry.getValue().pop();
-								count++;
-							}
-							for (int j = tmp.length - 1; j >= 0; j--) {
-								allPiles[i].addCard(tmp[j]);
-							}
-						}
-					}
-				}
+				
+//				for (int i = 0; i < 13; i++) {
+//					if (allPiles[i].includes(x, y)) {
+//						if (allPiles[i].canTake(selected_card)) {
+//							Card tmp[] = new Card[entry.getKey()];
+//							int count = 0;
+//							while (count != entry.getKey()) {
+//								tmp[count] = entry.getValue().pop();
+//								count++;
+//							}
+//							for (int j = tmp.length - 1; j >= 0; j--) {
+//								allPiles[i].addCard(tmp[j]);
+//							}
+//						}
+//					}
+//				}
+				
 			}
 
+			select_card = null;
 			have_select = false;
 			select_count.clear();
 			repaint();
 			return true;
-		}
 
-//		for (int i = 0; i < 13; i++) {
-//			allPiles[i].whatCard(x, y);
-//			repaint();
-//		}
-
-		for (int i = 0; i < 13; i++) {
-			if (allPiles[i].includes(x, y)) {
-				allPiles[i].select(x, y);
-				repaint();
-				return true;
+		} else {
+			for (int i = 0; i < 13; i++) {
+				if (allPiles[i].includes(x, y)) {
+					allPiles[i].select(x, y);
+					repaint();
+					return true;
+				}
 			}
+			return true;
+			
+//			for (int i = 0; i < 13; i++) {
+//				allPiles[i].whatCard(x, y);
+//				repaint();
+//			}
+//			return true;
 		}
-		
-		return true;
 	}
 
 	@Override
