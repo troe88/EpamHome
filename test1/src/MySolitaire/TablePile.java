@@ -4,9 +4,12 @@ import java.awt.Graphics;
 
 class TablePile extends CardPile {
 
-	TablePile(final int x, final int y, final int c) {
+	private int _index;
+	
+	TablePile(final int x, final int y, final int c, final int index) {
 		// initialize the parent class
 		super(x, y);
+		_index = index;
 		// then initialize our pile of cards
 		for (int i = 0; i < c; i++) {
 			addCard(Solitaire.deckPile.pop());
@@ -33,7 +36,13 @@ class TablePile extends CardPile {
 	@Override
 	public boolean includes(final int tx, final int ty) {
 		// don't test bottom of card
-		return x <= tx && tx <= x + Card.width && y <= ty;
+		boolean is_inc = false;
+		if(x <= tx && tx <= x + Card.width && y <= ty){
+			is_inc = true;
+			System.out.println(_index + " : " + top().getRank());
+		}
+		
+		return is_inc;
 	}
 
 	@Override

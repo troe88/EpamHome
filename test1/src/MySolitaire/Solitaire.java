@@ -5,8 +5,9 @@ package MySolitaire;
  Written by Tim Budd, Oregon State University, 1996
  */
 
-import java.awt.*;
-import java.applet.*;
+import java.applet.Applet;
+import java.awt.Event;
+import java.awt.Graphics;
 
 public class Solitaire extends Applet {
 	static CardPile allPiles[];
@@ -15,6 +16,7 @@ public class Solitaire extends Applet {
 	static SuitPile suitPile[];
 	static TablePile tableau[];
 
+	@Override
 	public void init() {
 		// first allocate the arrays
 		allPiles = new CardPile[13];
@@ -27,10 +29,11 @@ public class Solitaire extends Applet {
 			allPiles[2 + i] = suitPile[i] = new SuitPile(15 + 60 * i, 5);
 		}
 		for (int i = 0; i < 7; i++) {
-			allPiles[6 + i] = tableau[i] = new TablePile(5 + 55 * i, 80, i + 1);
+			allPiles[6 + i] = tableau[i] = new TablePile(5 + 55 * i, 80, i + 1, i);
 		}
 	}
 
+	@Override
 	public boolean mouseDown(final Event evt, final int x, final int y) {
 		for (int i = 0; i < 13; i++) {
 			if (allPiles[i].includes(x, y)) {
@@ -42,6 +45,7 @@ public class Solitaire extends Applet {
 		return true;
 	}
 
+	@Override
 	public void paint(final Graphics g) {
 		for (int i = 0; i < 13; i++) {
 			allPiles[i].display(g);
