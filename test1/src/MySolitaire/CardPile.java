@@ -85,4 +85,16 @@ class CardPile {
 	public Card top() {
 		return firstCard;
 	}
+
+	public void whatCard(final int x, final int y) {
+		
+	}
+
+	public void dropSelect() {
+		Card card = top();
+		while(card != null){
+			card.setSelected(false);
+			card = card.link;
+		}
+	}
 }

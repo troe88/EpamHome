@@ -31,7 +31,7 @@ class DeckPile extends CardPile {
 			}
 		}
 	}
-
+	
 	@Override
 	public void select(final int tx, final int ty) {
 		if (empty()) {
