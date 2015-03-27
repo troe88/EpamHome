@@ -24,6 +24,8 @@ class Card {
 	private int rank;
 	private int suit;
 
+	private boolean _selected;
+	
 	Card link;
 
 	// constructor
@@ -31,8 +33,9 @@ class Card {
 		suit = suitValue;
 		rank = rankValue;
 		faceup = false;
+		_selected = false;
 	}
-
+	
 	public int color() {
 		if (getSuit() == heart || getSuit() == diamond) {
 			return red;
@@ -47,6 +50,12 @@ class Card {
 		g.clearRect(x, y, width, height);
 		g.setColor(Color.black);
 		g.drawRect(x, y, width, height);
+		
+		if(_selected){
+			g.setColor(Color.gray);
+			g.fillRect(x+1, y+1, width-1, height-1);
+		}
+		
 		// draw body of card
 		if (isFaceUp()) {
 			if (color() == red) {
@@ -115,5 +124,13 @@ class Card {
 
 	final boolean isKing() {
 		return getRank() == 12;
+	}
+
+	public boolean isSelected() {
+		return _selected;
+	}
+
+	public void setSelected(final boolean selected) {
+		_selected = selected;
 	}
 }

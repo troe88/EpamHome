@@ -20,7 +20,11 @@ class DiscardPile extends CardPile {
 			return;
 		}
 
-		suitTakeCard();
+		Card c = top();
+		c.setSelected(true);
+		Solitaire.select_card.put(c, this);
+		Solitaire.have_select = true;
+		//suitTakeCard();
 		
 	}
 }

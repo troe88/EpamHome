@@ -34,14 +34,14 @@ class TablePile extends CardPile {
 	public boolean includes(final int tx, final int ty) {
 		// don't test bottom of card
 		boolean is_inc = false;
-		
+
 		int bot = (y + Card.height + (_card_count - 1) * 35);
 		int top = (y + (_card_count - 1) * 35);
-		
-		if (x <= tx && tx <= x + Card.width && top <= ty &&	ty <= bot) {
+
+		if (x <= tx && tx <= x + Card.width && top <= ty && ty <= bot) {
 			is_inc = true;
 			System.out.println("yes");
-		} 
+		}
 
 		return is_inc;
 	}
@@ -59,7 +59,12 @@ class TablePile extends CardPile {
 			return;
 		}
 
-		suitTakeCard();
+		Card c = top();
+		c.setSelected(true);
+		Solitaire.select_card.put(c, this);
+		Solitaire.have_select = true;
+
+		// suitTakeCard();
 	}
 
 	private int stackDisplay(final Graphics g, final Card aCard) {
