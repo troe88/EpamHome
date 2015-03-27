@@ -44,62 +44,43 @@ public class Solitaire extends Applet {
 		}
 	}
 
-	@Override
-	public boolean mouseDown(final Event evt, final int x, final int y) {
-		// if (have_select) {
-		// for (Map.Entry<Card, CardPile> entry : select_card.entrySet()) {
-		// for (int i = 0; i < 13; i++) {
-		// if (allPiles[i].includes(x, y)) {
-		// if (allPiles[i].canTake(entry.getKey())) {
-		// allPiles[i].addCard(entry.getValue().pop());
-		// }
-		// }
-		// }
-		// entry.getKey().setSelected(false);
-		// have_select = false;
-		// select_card.clear();
-		// repaint();
-		// return true;
-		// }
-		// return true;
-		// }
-		//
-		// for (int i = 0; i < 13; i++) {
-		// if (allPiles[i].includes(x, y)) {
-		// allPiles[i].select(x, y);
-		// repaint();
-		// return true;
-		// }
-		// }
-		// return true;
+	private void tryToTransfer(final int x, final int y) {
+		Map.Entry<Integer, CardPile> entry = select_count.entrySet().iterator()
+				.next();
 
-		// / NEW
-
-		if (have_select) {
-
-			Map.Entry<Integer, CardPile> entry = select_count.entrySet()
-					.iterator().next();
-
-			entry.getValue().dropSelect();
-			for (int i = 0; i < 13; i++) {
-				if (allPiles[i].includes(x, y)) {
-					if (allPiles[i].canTake(selected_card)) {
-						Card tmp[] = new Card[entry.getKey()];
-						int count = 0;
-						while (count != entry.getKey()) {
-							tmp[count] = entry.getValue().pop();
-							count++;
-						}
-						for (int j = tmp.length - 1; j >= 0; j--) {
-							allPiles[i].addCard(tmp[j]);
-						}
+		entry.getValue().dropSelect();
+		for (int i = 0; i < 13; i++) {
+			if (allPiles[i].includes(x, y)) {
+				if (allPiles[i].canTake(selected_card)) {
+					Card tmp[] = new Card[entry.getKey()];
+					int count = 0;
+					while (count != entry.getKey()) {
+						tmp[count] = entry.getValue().pop();
+						count++;
+					}
+					for (int j = tmp.length - 1; j >= 0; j--) {
+						allPiles[i].addCard(tmp[j]);
 					}
 				}
 			}
+		}
 
-			select_card = null;
-			have_select = false;
-			select_count.clear();
+		select_card = null;
+		have_select = false;
+		select_count.clear();
+
+	}
+
+	public static int getSelectedCount() {
+		Map.Entry<Integer, CardPile> entry = select_count.entrySet().iterator()
+				.next();
+		return entry.getKey();
+	}
+
+	@Override
+	public boolean mouseDown(final Event evt, final int x, final int y) {
+		if (have_select) {
+			tryToTransfer(x, y);
 			repaint();
 			return true;
 
