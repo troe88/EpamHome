@@ -19,12 +19,12 @@ class DiscardPile extends CardPile {
 		if (empty()) {
 			return;
 		}
-
-		Card c = top();
-		c.setSelected(true);
-		Solitaire.select_card.put(c, this);
+		
+		Card card = top();
+		card.setSelected(true);
+		Solitaire.selected_card = card;
 		Solitaire.have_select = true;
-		//suitTakeCard();
+		Solitaire.select_count.put(1, this);
 		
 	}
 }

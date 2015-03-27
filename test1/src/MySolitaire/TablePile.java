@@ -32,13 +32,19 @@ class TablePile extends CardPile {
 
 	@Override
 	public boolean includes(final int tx, final int ty) {
-		return x <= tx && tx <= x + Card.width && y <= ty;
+		boolean is_inc = false;
+
+		int bot = (y + Card.height + (_card_count - 1) * 35);
+
+		if (x <= tx && tx <= x + Card.width && ty <= bot) {
+			is_inc = true;
+		}
+
+		return is_inc;
 	}
-
-	@SuppressWarnings("unused")
+	
 	@Override
-	public void whatCard(final int tx, final int ty) {
-
+	public void select(final int tx, final int ty) {
 		if (top() == null)
 			return;
 
@@ -71,8 +77,6 @@ class TablePile extends CardPile {
 			return;
 		}
 
-
-
 		card.setSelected(true);
 		Solitaire.selected_card = card;
 		Solitaire.have_select = true;
@@ -86,12 +90,6 @@ class TablePile extends CardPile {
 		}
 
 		Solitaire.select_count.put(card_to_drop, this);
-
-	}
-
-	@Override
-	public void select(final int tx, final int ty) {
-		whatCard(tx, ty);
 	}
 
 	private int stackDisplay(final Graphics g, final Card aCard) {
