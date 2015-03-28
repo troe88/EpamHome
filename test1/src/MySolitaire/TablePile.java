@@ -27,6 +27,10 @@ class TablePile extends CardPile {
 
 	@Override
 	public void display(final Graphics g) {
+		if(firstCard == null){
+			super.display(g);
+			return;
+		}
 		stackDisplay(g, top());
 	}
 
@@ -73,16 +77,6 @@ class TablePile extends CardPile {
 
 	}
 
-	@Override
-	public void mark() {
-		top().setCanGet(true);
-	}
-	
-	@Override
-	public void unMark() {
-		top().setCanGet(false);
-	}
-	
 	private int stackDisplay(final Graphics g, final Card aCard) {
 		int localy;
 		if (aCard == null) {

@@ -16,7 +16,7 @@ public class Solitaire extends Applet {
 	static CardPile allPiles[];
 	static DeckPile deckPile;
 	static DiscardPile discardPile;
-	static SuitPile suitPile[];
+	static CardPile suitPile[];
 	static CardPile tableau[];
 
 	static boolean have_select;
@@ -29,13 +29,13 @@ public class Solitaire extends Applet {
 	
 	@Override
 	public void init() {
-		setSize(400, 380);
+		setSize(400, 500);
 		selected_cards = new LinkedList<Card>();
 		have_select = false;
 		flag_do = false;
 		// first allocate the arrays
 		allPiles = new CardPile[13];
-		suitPile = new SuitPile[4];
+		suitPile = new CardPile[4];
 		tableau = new CardPile[7];
 		// then fill them in
 		allPiles[0] = deckPile = new DeckPile(335, 5);
@@ -118,7 +118,7 @@ public class Solitaire extends Applet {
 		if(evt.clickCount == 2){
 			for (int i = 0; i < 13; i++) {
 				if(selected_cards.isEmpty()) return true; 
-				if (allPiles[i].canTake(selected_cards.getFirst())) {
+				if (allPiles[i].canTake(selected_cards.getFirst()) && allPiles[i] != selected_pile) {
 					allPiles[i].mark();
 				}
 			}

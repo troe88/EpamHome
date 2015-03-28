@@ -1,18 +1,22 @@
 package MySolitaire;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 class CardPile {
 
-	private Card firstCard;
+	protected Card firstCard;
 
 	// coordinates of the card pile
 	protected int x;
 	protected int y;
-	
+
 	protected int _card_count;
-	
+
+	protected boolean is_mark;
+
 	CardPile(final int xl, final int yl) {
 		x = xl;
 		y = yl;
@@ -36,6 +40,15 @@ class CardPile {
 	public void display(final Graphics g) {
 		g.setColor(Color.black);
 		if (firstCard == null) {
+			if (is_mark) {
+				g.setColor(Color.red);
+				((Graphics2D) g).setStroke(new BasicStroke(3));
+
+			} else {
+				// clear rectangle, draw border
+				((Graphics2D) g).setStroke(new BasicStroke(1));
+				g.setColor(Color.black);
+			}
 			g.drawRect(x, y, Card.width, Card.height);
 		} else {
 			firstCard.draw(g, x, y);
@@ -65,8 +78,8 @@ class CardPile {
 	}
 
 	public boolean includes(final int tx, final int ty) {
-		return x <= tx && tx <= x + Card.width &&
-			   y <= ty && ty <= y + Card.height;
+		return x <= tx && tx <= x + Card.width && y <= ty
+				&& ty <= y + Card.height;
 	}
 
 	public Card pop() {
@@ -83,25 +96,26 @@ class CardPile {
 		// do nothing
 	}
 
-	public void mark(){
-		
+	public void mark() {
+		is_mark = true;
+		if (top() != null)
+			top().setCanGet(true);
 	}
-	
-	public void unMark(){
-		
+
+	public void unMark() {
+		is_mark = false;
+		if (top() != null)
+			top().setCanGet(false);
+
 	}
-	
+
 	public Card top() {
 		return firstCard;
 	}
 
-	public void whatCard(final int x, final int y) {
-		
-	}
-
 	public void dropSelect() {
 		Card card = top();
-		while(card != null){
+		while (card != null) {
 			card.setSelected(false);
 			card = card.link;
 		}

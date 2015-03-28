@@ -1,9 +1,12 @@
 package MySolitaire;
 
+import java.awt.Graphics;
+
 class SuitPile extends CardPile {
 
 	SuitPile(final int x, final int y) {
 		super(x, y);
+		is_mark = false;
 	}
 
 	@Override
@@ -21,4 +24,18 @@ class SuitPile extends CardPile {
 		return (aCard.getSuit() == topCard.getSuit())
 				&& (aCard.getRank() == 1 + topCard.getRank());
 	}
+	
+	@Override
+	public void display(final Graphics g) {
+
+		
+		if(top() != null && is_mark)
+			top().setCanGet(true);
+		
+		super.display(g);
+	}
+	
+	
+
+	
 }
