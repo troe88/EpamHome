@@ -32,7 +32,7 @@ class Card {
 	Card(final int suitValue, final int rankValue) {
 		suit = suitValue;
 		rank = rankValue;
-		faceup = false;
+		faceup = true;
 		_selected = false;
 	}
 	
@@ -106,7 +106,7 @@ class Card {
 	}
 
 	public void flip() {
-		faceup = !faceup;
+//		faceup = !faceup;
 	}
 
 	// access attributes of card

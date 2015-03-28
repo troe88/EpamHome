@@ -8,7 +8,9 @@ package MySolitaire;
 import java.applet.Applet;
 import java.awt.Event;
 import java.awt.Graphics;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @SuppressWarnings("serial")
@@ -23,11 +25,14 @@ public class Solitaire extends Applet {
 	static Map<Integer, CardPile> select_count;
 	static boolean have_select;
 	static Card selected_card;
-	private int _X;
-	private int _Y;
-
+	public static int _X;
+	public static int _Y;
+	public static Deque<Card> st_cards;
+	public static CardPile s_pile;
+	
 	@Override
 	public void init() {
+		st_cards = new LinkedList<Card>();
 		select_card = new HashMap<Card, CardPile>(1);
 		select_count = new HashMap<Integer, CardPile>(1);
 		have_select = false;
@@ -47,26 +52,23 @@ public class Solitaire extends Applet {
 	}
 
 	private void tryToTransfer(final int x, final int y) {
-		Map.Entry<Integer, CardPile> entry = select_count.entrySet().iterator()
-				.next();
-
-		entry.getValue().dropSelect();
 		for (int i = 0; i < 13; i++) {
-			if (allPiles[i].includes(x, y)) {
-				if (allPiles[i].canTake(selected_card)) {
-					Card tmp[] = new Card[entry.getKey()];
-					int count = 0;
-					while (count != entry.getKey()) {
-						tmp[count] = entry.getValue().pop();
-						count++;
-					}
-					for (int j = tmp.length - 1; j >= 0; j--) {
-						allPiles[i].addCard(tmp[j]);
+			if (allPiles[i].includes(x, y)) {				
+				if (allPiles[i].canTake(st_cards.getFirst())) {		
+					while (!st_cards.isEmpty()) {
+						allPiles[i].addCard(st_cards.removeFirst());
 					}
 				}
+				System.out.println("cant!");
 			}
 		}
 
+		while (!st_cards.isEmpty()) {
+			s_pile.addCard(st_cards.removeFirst());
+		}
+		
+		repaint();
+		s_pile = null;
 		select_card = null;
 		have_select = false;
 		select_count.clear();
@@ -74,9 +76,7 @@ public class Solitaire extends Applet {
 	}
 
 	public static int getSelectedCount() {
-		Map.Entry<Integer, CardPile> entry = select_count.entrySet().iterator()
-				.next();
-		return entry.getKey();
+		return st_cards.size();
 	}
 
 	@Override
@@ -98,18 +98,19 @@ public class Solitaire extends Applet {
 	@Override
 	public boolean mouseUp(final Event evt, final int x, final int y) {
 		if (have_select) {
-			Map.Entry<Integer, CardPile> entry = select_count.entrySet()
-					.iterator().next();
-			entry.getValue().addCard(selected_card);
-
+//			Map.Entry<Integer, CardPile> entry = select_count.entrySet()
+//					.iterator().next();
+//			entry.getValue().addCard(selected_card);
+//
 			tryToTransfer(x, y);
-			
-			selected_card.setSelected(false);
-			selected_card = null;
+//			
+	//		selected_card.setSelected(false);
+	//		selected_card = null;
 			have_select = false;
-			select_count.clear();
-
-			repaint();
+			st_cards.clear();
+	//		select_count.clear();
+//
+//			repaint();
 		}
 		return true;
 	}
@@ -138,9 +139,14 @@ public class Solitaire extends Applet {
 		for (int i = 0; i < 13; i++) {
 			allPiles[i].display(g);
 		}
-		if (selected_card != null) {
-			System.out.println("z");
-			selected_card.draw(g, _X, _Y);
+
+		if(!st_cards.isEmpty())
+		{
+			int i = 0;
+			for(Card card : st_cards) {
+				card.draw(g, _X, _Y + (i * 35));
+				i++;
+			}
 		}
 	}
 }

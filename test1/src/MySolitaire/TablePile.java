@@ -32,64 +32,38 @@ class TablePile extends CardPile {
 
 	@Override
 	public boolean includes(final int tx, final int ty) {
-		boolean is_inc = false;
-
-		int bot = (y + Card.height + (_card_count - 1) * 35);
-
-		if (x <= tx && tx <= x + Card.width && ty <= bot) {
-			is_inc = true;
-		}
-
-		return is_inc;
+		return x <= tx && tx <= x + Card.width && y <= ty;
 	}
-	
+
 	@Override
 	public void select(final int tx, final int ty) {
-		if (top() == null)
-			return;
 
-		if (!top().isFaceUp()) {
-			top().flip();
-			return;
-		}
+		Card card = top();
 
 		int count = _card_count - 1;
 
-		Card card = top();
 		TOP: while (card != null) {
 			int bot = (y + Card.height + count * 35);
 			int top = (y + count * 35);
 			if (top <= ty && ty <= bot) {
-				System.out.println(card.getRank() + 1);
 				break TOP;
 			}
-
 			card = card.link;
 			count--;
 		}
-		
-		if (card == null) {
-			System.out.println("err");
-			return;
-		}
-		
-		if (card.isFaceUp() == false) {
-			return;
+		int s = _card_count - count;
+
+		Solitaire.st_cards.clear();
+
+		for (int i = 0; i < s; i++) {
+			top().setSelected(true);
+			Solitaire.st_cards.addFirst(pop());
 		}
 
-		card.setSelected(true);
-		Solitaire.selected_card = card;
+		System.out.println(Solitaire.st_cards.size());
+		Solitaire.s_pile = this;
 		Solitaire.have_select = true;
 
-		Card temp = top();
-		int card_to_drop = 1;
-		while (temp != card) {
-			card_to_drop++;
-			temp.setSelected(true);
-			temp = temp.link;
-		}
-
-		Solitaire.select_count.put(card_to_drop, this);
 	}
 
 	private int stackDisplay(final Graphics g, final Card aCard) {

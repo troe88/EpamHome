@@ -20,12 +20,10 @@ class DiscardPile extends CardPile {
 			return;
 		}
 		
-		Card card = pop();
-		card.setSelected(true);
-		Solitaire.selected_card = card;
-		Solitaire.have_select = true;
-		Solitaire.select_count.put(1, this);
-		
+		Solitaire.s_pile = this;
+		top().setSelected(true);
+		Solitaire.st_cards.addFirst(pop());
+		Solitaire.have_select = true;		
 	}
 }
 
