@@ -52,7 +52,6 @@ public class Solitaire extends Applet {
 		System.out.println("tryeToTfansfer()");
 		for (int i = 0; i < 13; i++) {
 			if (allPiles[i].includes(x, y)) {
-				allPiles[i].unMark();
 				if (allPiles[i].canTake(selected_cards.getFirst())) {
 					while (!selected_cards.isEmpty()) {
 						allPiles[i].addCard(selected_cards.removeFirst());
@@ -96,6 +95,11 @@ public class Solitaire extends Applet {
 	public boolean mouseUp(final Event evt, final int x, final int y) {
 		System.out.println("mouseUp()");
 		if (have_select && flag_do) {
+			
+			for (int i = 0; i < 13; i++) {
+				allPiles[i].unMark();
+			}
+			
 			tryToTransfer(x, y);
 
 			have_select = false;
