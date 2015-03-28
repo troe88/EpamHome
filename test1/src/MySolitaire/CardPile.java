@@ -83,6 +83,14 @@ class CardPile {
 		// do nothing
 	}
 
+	public void mark(){
+		
+	}
+	
+	public void unMark(){
+		
+	}
+	
 	public Card top() {
 		return firstCard;
 	}

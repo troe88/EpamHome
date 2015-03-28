@@ -63,14 +63,15 @@ class Card {
 		if (_can_get) {
 			g.setColor(Color.red);
 			((Graphics2D)g).setStroke(new BasicStroke(3));
-			g.drawRect(x, y, width, height);
 
 		} else {
 			// clear rectangle, draw border
+			((Graphics2D)g).setStroke(new BasicStroke(1));
 			g.setColor(Color.black);
-			g.drawRect(x, y, width, height);
 		}
 
+		g.drawRect(x, y, width, height);
+		
 		if (_selected) {
 			g.setColor(Color.decode("0xD9FCFF"));
 			g.fillRect(x + 1, y + 1, width - 1, height - 1);

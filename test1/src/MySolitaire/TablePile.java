@@ -65,14 +65,24 @@ class TablePile extends CardPile {
 
 		for (int i = 0; i < s; i++) {
 			top().setSelected(true);
-			Solitaire.st_cards.addFirst(pop());
+			Solitaire.selected_cards.addFirst(pop());
 		}
 
-		Solitaire.s_pile = this;
+		Solitaire.selected_pile = this;
 		Solitaire.have_select = true;
 
 	}
 
+	@Override
+	public void mark() {
+		top().setCanGet(true);
+	}
+	
+	@Override
+	public void unMark() {
+		top().setCanGet(false);
+	}
+	
 	private int stackDisplay(final Graphics g, final Card aCard) {
 		int localy;
 		if (aCard == null) {

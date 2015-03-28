@@ -22,14 +22,17 @@ public class Solitaire extends Applet {
 	static boolean have_select;
 	public static int _X;
 	public static int _Y;
-	public static Deque<Card> st_cards;
-	public static CardPile s_pile;
+	public static Deque<Card> selected_cards;
+	public static CardPile selected_pile;
 
+	public static boolean flag_do;
+	
 	@Override
 	public void init() {
 		setSize(400, 380);
-		st_cards = new LinkedList<Card>();
+		selected_cards = new LinkedList<Card>();
 		have_select = false;
+		flag_do = false;
 		// first allocate the arrays
 		allPiles = new CardPile[13];
 		suitPile = new SuitPile[4];
@@ -46,28 +49,31 @@ public class Solitaire extends Applet {
 	}
 
 	private void tryToTransfer(final int x, final int y) {
+		System.out.println("tryeToTfansfer()");
 		for (int i = 0; i < 13; i++) {
 			if (allPiles[i].includes(x, y)) {
-				if (allPiles[i].canTake(st_cards.getFirst())) {
-					while (!st_cards.isEmpty()) {
-						allPiles[i].addCard(st_cards.removeFirst());
+				allPiles[i].unMark();
+				if (allPiles[i].canTake(selected_cards.getFirst())) {
+					while (!selected_cards.isEmpty()) {
+						allPiles[i].addCard(selected_cards.removeFirst());
 					}
 				}
 			}
 		}
 
-		while (!st_cards.isEmpty()) {
-			s_pile.addCard(st_cards.removeFirst());
+		while (!selected_cards.isEmpty()) {
+			selected_pile.addCard(selected_cards.removeFirst());
 		}
-
+		
+		
 		repaint();
-		s_pile = null;
+		selected_pile = null;
 		have_select = false;
 
 	}
 
 	public static int getSelectedCount() {
-		return st_cards.size();
+		return selected_cards.size();
 	}
 
 	@Override
@@ -79,6 +85,7 @@ public class Solitaire extends Applet {
 
 	@Override
 	public boolean mouseDrag(final Event evt, final int x, final int y) {
+		flag_do = true;
 		_X = x;
 		_Y = y;
 		repaint();
@@ -87,11 +94,12 @@ public class Solitaire extends Applet {
 
 	@Override
 	public boolean mouseUp(final Event evt, final int x, final int y) {
-		if (have_select) {
+		System.out.println("mouseUp()");
+		if (have_select && flag_do) {
 			tryToTransfer(x, y);
 
 			have_select = false;
-			st_cards.clear();
+			selected_cards.clear();
 			repaint();
 		}
 		pos_flag = true;
@@ -100,12 +108,24 @@ public class Solitaire extends Applet {
 
 	@Override
 	public boolean mouseDown(final Event evt, final int x, final int y) {
+		System.out.println("mouseDown()");
+		flag_do = false;
 		
 		if(evt.clickCount == 2){
-			System.out.println("QWE");
+			for (int i = 0; i < 13; i++) {
+				if(selected_cards.isEmpty()) return true; 
+				if (allPiles[i].canTake(selected_cards.getFirst())) {
+					allPiles[i].mark();
+				}
+			}
+			
+			flag_do = false;
+			repaint();
+			return true;
 		}
 		
 		if (have_select) {
+			flag_do = true;
 			return true;
 		} else {
 			for (int i = 0; i < 13; i++) {
@@ -128,18 +148,18 @@ public class Solitaire extends Applet {
 		for (int i = 0; i < 13; i++)
 			allPiles[i].display(g);
 
-		if (!st_cards.isEmpty()) {
+		if (!selected_cards.isEmpty()) {
 			if (pos_flag) {
-				dx = _X - s_pile.x;
-				if (s_pile instanceof DiscardPile)
-					dy = _Y - (s_pile.y);
+				dx = _X - selected_pile.x;
+				if (selected_pile instanceof DiscardPile)
+					dy = _Y - (selected_pile.y);
 				else
-					dy = _Y - (s_pile.y + 35 * (s_pile._card_count));
+					dy = _Y - (selected_pile.y + 35 * (selected_pile._card_count));
 				pos_flag = false;
 			}
 
 			int i = 0;
-			for (Card card : st_cards) {
+			for (Card card : selected_cards) {
 				card.draw(g, _X - dx, _Y + (i * 35) - dy);
 				i++;
 			}

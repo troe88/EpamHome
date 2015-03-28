@@ -20,13 +20,9 @@ class DiscardPile extends CardPile {
 			return;
 		}
 		
-		Solitaire.s_pile = this;
+		Solitaire.selected_pile = this;
 		top().setSelected(true);
-		Solitaire.st_cards.addFirst(pop());
+		Solitaire.selected_cards .addFirst(pop());
 		Solitaire.have_select = true;		
 	}
 }
-
-// Выбрать карту по маусДаун() pop()
-// Перемещать карту вслед за курсором
-// По маусАП() вернуть карту на место.
