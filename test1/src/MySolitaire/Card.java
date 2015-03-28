@@ -1,7 +1,9 @@
 package MySolitaire;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 class Card {
 	final static int black = 1;
@@ -18,24 +20,34 @@ class Card {
 	// data fields for colors and suits
 	// private static String names[] = {"A", "2", "3", "4", "5", "6",
 	// "7", "8", "9", "10", "J", "Q", "K"};
-	
+
 	// data fields
 	private boolean faceup;
 	private int rank;
 	private int suit;
 
 	private boolean _selected;
-	
+	private boolean _can_get;
+
+	public boolean isCanGet() {
+		return _can_get;
+	}
+
+	public void setCanGet(final boolean can_get) {
+		_can_get = can_get;
+	}
+
 	Card link;
 
 	// constructor
 	Card(final int suitValue, final int rankValue) {
+		_can_get = false;
 		suit = suitValue;
 		rank = rankValue;
 		faceup = false;
 		_selected = false;
 	}
-	
+
 	public int color() {
 		if (getSuit() == heart || getSuit() == diamond) {
 			return red;
@@ -46,16 +58,27 @@ class Card {
 	public void draw(final Graphics g, final int x, final int y) {
 		String names[] = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10",
 				"J", "Q", "K" };
-		// clear rectangle, draw border
+
 		g.clearRect(x, y, width, height);
-		g.setColor(Color.black);
-		g.drawRect(x, y, width, height);
-		
-		if(_selected){
-			g.setColor(Color.gray);
-			g.fillRect(x+1, y+1, width-1, height-1);
+		if (_can_get) {
+			g.setColor(Color.red);
+			((Graphics2D)g).setStroke(new BasicStroke(3));
+			g.drawRect(x, y, width, height);
+
+		} else {
+			// clear rectangle, draw border
+			g.setColor(Color.black);
+			g.drawRect(x, y, width, height);
 		}
-		
+
+		if (_selected) {
+			g.setColor(Color.decode("0xD9FCFF"));
+			g.fillRect(x + 1, y + 1, width - 1, height - 1);
+		} else {
+			g.setColor(Color.decode("0xF5F5F5"));
+			g.fillRect(x + 1, y + 1, width - 1, height - 1);
+		}
+
 		// draw body of card
 		if (isFaceUp()) {
 			if (color() == red) {
@@ -92,7 +115,7 @@ class Card {
 				g.drawLine(x + 30, y + 55, x + 27, y + 45);
 			}
 		} else { // face down
-			g.setColor(Color.yellow);
+			g.setColor(Color.decode("0xFFD100"));
 			g.drawLine(x + 15, y + 5, x + 15, y + 65);
 			g.drawLine(x + 35, y + 5, x + 35, y + 65);
 			g.drawLine(x + 5, y + 20, x + 45, y + 20);

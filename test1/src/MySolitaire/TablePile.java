@@ -32,7 +32,8 @@ class TablePile extends CardPile {
 
 	@Override
 	public boolean includes(final int tx, final int ty) {
-		return x <= tx && tx <= x + Card.width && y <= ty;
+		return x <= tx && tx <= x + Card.width && y <= ty
+				&& ty <= y + 35 * (_card_count + 1);
 	}
 
 	@Override
@@ -40,11 +41,11 @@ class TablePile extends CardPile {
 
 		Card card = top();
 
-		if(!card.isFaceUp()){
+		if (!card.isFaceUp()) {
 			top().flip();
 			return;
 		}
-		
+
 		int count = _card_count - 1;
 
 		TOP: while (card != null) {
@@ -56,20 +57,17 @@ class TablePile extends CardPile {
 			card = card.link;
 			count--;
 		}
-		
-		if(!card.isFaceUp())
-			return;
-		
-		int s = _card_count - count;
 
-		Solitaire.st_cards.clear();
+		if (!card.isFaceUp())
+			return;
+
+		int s = _card_count - count;
 
 		for (int i = 0; i < s; i++) {
 			top().setSelected(true);
 			Solitaire.st_cards.addFirst(pop());
 		}
 
-		System.out.println(Solitaire.st_cards.size());
 		Solitaire.s_pile = this;
 		Solitaire.have_select = true;
 
