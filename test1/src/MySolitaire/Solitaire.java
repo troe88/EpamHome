@@ -6,8 +6,10 @@ package MySolitaire;
  */
 
 import java.applet.Applet;
+import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -26,13 +28,35 @@ public class Solitaire extends Applet {
 	public static CardPile selected_pile;
 
 	public static boolean flag_do;
-	
+	private boolean _is_win;
+
+	// BUF
+	// The object we will use to write with instead of the standard screen
+	// graphics
+	Graphics bufferGraphics;
+	// The image that will contain everything that has been drawn on
+	// bufferGraphics.
+	Image offscreen;
+	// To get the width and height of the applet.
+	Dimension dim;
+	int curX, curY;
+
+	// BUF
 	@Override
 	public void init() {
 		setSize(400, 500);
 		selected_cards = new LinkedList<Card>();
 		have_select = false;
 		flag_do = false;
+		_is_win = false;
+
+		// BUF
+		offscreen = createImage(400,500);
+		// by doing this everything that is drawn by bufferGraphics
+		// will be written on the offscreen image.
+		bufferGraphics = offscreen.getGraphics();
+		// BUF
+
 		// first allocate the arrays
 		allPiles = new CardPile[13];
 		suitPile = new CardPile[4];
@@ -63,8 +87,7 @@ public class Solitaire extends Applet {
 		while (!selected_cards.isEmpty()) {
 			selected_pile.addCard(selected_cards.removeFirst());
 		}
-		
-		
+
 		repaint();
 		selected_pile = null;
 		have_select = false;
@@ -95,11 +118,11 @@ public class Solitaire extends Applet {
 	public boolean mouseUp(final Event evt, final int x, final int y) {
 		System.out.println("mouseUp()");
 		if (have_select && flag_do) {
-			
+
 			for (int i = 0; i < 13; i++) {
 				allPiles[i].unMark();
 			}
-			
+
 			tryToTransfer(x, y);
 
 			have_select = false;
@@ -107,27 +130,45 @@ public class Solitaire extends Applet {
 			repaint();
 		}
 		pos_flag = true;
+
+		winnerCheck();
+
 		return true;
+	}
+
+	public void winnerCheck() {
+		_is_win = true;
+		for (int i = 0; i < 4; i++) {
+			if (!suitPile[i].empty()) {
+				if (!suitPile[i].top().isKing())
+					_is_win = false;
+			} else {
+				_is_win = false;
+				return;
+			}
+		}
 	}
 
 	@Override
 	public boolean mouseDown(final Event evt, final int x, final int y) {
 		System.out.println("mouseDown()");
 		flag_do = false;
-		
-		if(evt.clickCount == 2){
+
+		if (evt.clickCount == 2) {
 			for (int i = 0; i < 13; i++) {
-				if(selected_cards.isEmpty()) return true; 
-				if (allPiles[i].canTake(selected_cards.getFirst()) && allPiles[i] != selected_pile) {
+				if (selected_cards.isEmpty())
+					return true;
+				if (allPiles[i].canTake(selected_cards.getFirst())
+						&& allPiles[i] != selected_pile) {
 					allPiles[i].mark();
 				}
 			}
-			
+
 			flag_do = false;
 			repaint();
 			return true;
 		}
-		
+
 		if (have_select) {
 			flag_do = true;
 			return true;
@@ -143,14 +184,24 @@ public class Solitaire extends Applet {
 		}
 	}
 
-	
+	private void drawWinMsg() {
+		// TODO Auto-generated method stub
+		System.out.println("WINNER!");
+		System.exit(0);
+	}
+
 	boolean pos_flag = true;
 	int dx = 0;
 	int dy = 0;
+
 	@Override
 	public void paint(final Graphics g) {
+		bufferGraphics.clearRect(0,0,400,500); 
 		for (int i = 0; i < 13; i++)
-			allPiles[i].display(g);
+			allPiles[i].display(bufferGraphics);
+
+		if (_is_win)
+			drawWinMsg();
 
 		if (!selected_cards.isEmpty()) {
 			if (pos_flag) {
@@ -158,15 +209,18 @@ public class Solitaire extends Applet {
 				if (selected_pile instanceof DiscardPile)
 					dy = _Y - (selected_pile.y);
 				else
-					dy = _Y - (selected_pile.y + 35 * (selected_pile._card_count));
+					dy = _Y
+							- (selected_pile.y + 35 * (selected_pile._card_count));
 				pos_flag = false;
 			}
 
 			int i = 0;
 			for (Card card : selected_cards) {
-				card.draw(g, _X - dx, _Y + (i * 35) - dy);
+				card.draw(bufferGraphics, _X - dx, _Y + (i * 35) - dy);
 				i++;
 			}
 		}
+
+		g.drawImage(offscreen, 0, 0, this);
 	}
 }
