@@ -6,10 +6,10 @@ package MySolitaire;
  */
 
 import java.applet.Applet;
-import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.geom.Rectangle2D;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -30,18 +30,6 @@ public class Solitaire extends Applet {
 	public static boolean flag_do;
 	private boolean _is_win;
 
-	// BUF
-	// The object we will use to write with instead of the standard screen
-	// graphics
-	Graphics bufferGraphics;
-	// The image that will contain everything that has been drawn on
-	// bufferGraphics.
-	Image offscreen;
-	// To get the width and height of the applet.
-	Dimension dim;
-	int curX, curY;
-
-	// BUF
 	@Override
 	public void init() {
 		setSize(400, 500);
@@ -49,13 +37,6 @@ public class Solitaire extends Applet {
 		have_select = false;
 		flag_do = false;
 		_is_win = false;
-
-		// BUF
-		offscreen = createImage(400,500);
-		// by doing this everything that is drawn by bufferGraphics
-		// will be written on the offscreen image.
-		bufferGraphics = offscreen.getGraphics();
-		// BUF
 
 		// first allocate the arrays
 		allPiles = new CardPile[13];
@@ -190,37 +171,52 @@ public class Solitaire extends Applet {
 		System.exit(0);
 	}
 
+	@Override
+	public void update(final Graphics g) {
+		Graphics offgc;
+		Image offscreen = null;
+		Rectangle2D box = g.getClip().getBounds2D();
+		offscreen = createImage((int) box.getWidth(), (int) box.getHeight());
+		offgc = offscreen.getGraphics();
+		offgc.setColor(getBackground());
+		offgc.fillRect(0, 0, (int) box.getWidth(), (int) box.getHeight());
+		offgc.setColor(getForeground());
+		offgc.translate(-(int) box.getX(), -(int) box.getY());
+		paint(offgc);
+		g.drawImage(offscreen, (int) box.getX(), (int) box.getY(), this);
+	}
+
 	boolean pos_flag = true;
 	int dx = 0;
 	int dy = 0;
-
+	public void calcDifXY(){
+		if (pos_flag) {
+			dx = _X - selected_pile.x;
+			if (selected_pile instanceof DiscardPile)
+				dy = _Y - (selected_pile.y);
+			else
+				dy = _Y
+						- (selected_pile.y + 35 * (selected_pile._card_count));
+			pos_flag = false;
+		}
+	}
+	
 	@Override
 	public void paint(final Graphics g) {
-		bufferGraphics.clearRect(0,0,400,500); 
 		for (int i = 0; i < 13; i++)
-			allPiles[i].display(bufferGraphics);
+			allPiles[i].display(g);
 
 		if (_is_win)
 			drawWinMsg();
 
 		if (!selected_cards.isEmpty()) {
-			if (pos_flag) {
-				dx = _X - selected_pile.x;
-				if (selected_pile instanceof DiscardPile)
-					dy = _Y - (selected_pile.y);
-				else
-					dy = _Y
-							- (selected_pile.y + 35 * (selected_pile._card_count));
-				pos_flag = false;
-			}
-
+			calcDifXY();
 			int i = 0;
 			for (Card card : selected_cards) {
-				card.draw(bufferGraphics, _X - dx, _Y + (i * 35) - dy);
+				card.draw(g, _X - dx, _Y + (i * 35) - dy);
 				i++;
 			}
 		}
 
-		g.drawImage(offscreen, 0, 0, this);
 	}
 }
