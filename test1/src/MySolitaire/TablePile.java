@@ -40,6 +40,11 @@ class TablePile extends CardPile {
 
 		Card card = top();
 
+		if(!card.isFaceUp()){
+			top().flip();
+			return;
+		}
+		
 		int count = _card_count - 1;
 
 		TOP: while (card != null) {
@@ -51,6 +56,10 @@ class TablePile extends CardPile {
 			card = card.link;
 			count--;
 		}
+		
+		if(!card.isFaceUp())
+			return;
+		
 		int s = _card_count - count;
 
 		Solitaire.st_cards.clear();
