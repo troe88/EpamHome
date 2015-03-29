@@ -6,7 +6,9 @@ package MySolitaire;
  */
 
 import java.applet.Applet;
+import java.awt.Color;
 import java.awt.Event;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
@@ -37,7 +39,7 @@ public class Solitaire extends Applet {
 		have_select = false;
 		flag_do = false;
 		_is_win = false;
-
+		_myFont = new Font("TimesRoman", Font.BOLD, 30);
 		// first allocate the arrays
 		allPiles = new CardPile[13];
 		suitPile = new CardPile[4];
@@ -165,10 +167,19 @@ public class Solitaire extends Applet {
 		}
 	}
 
-	private void drawWinMsg() {
-		// TODO Auto-generated method stub
-		System.out.println("WINNER!");
-		System.exit(0);
+	private void drawWinMsg(final Graphics g) {
+
+		Rectangle2D box = g.getClip().getBounds2D();
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, (int) box.getWidth(), (int) box.getHeight());
+
+		g.setFont(_myFont);
+
+		g.setColor(Color.black);
+		String msg = "You're a winner!";
+		int text_size = msg.length() * 10;
+		g.drawString(msg, (int) box.getWidth() / 2 - text_size,
+				(int) box.getHeight() / 2);
 	}
 
 	@Override
@@ -189,25 +200,29 @@ public class Solitaire extends Applet {
 	boolean pos_flag = true;
 	int dx = 0;
 	int dy = 0;
-	public void calcDifXY(){
+	private Font _myFont;
+
+	public void calcDifXY() {
 		if (pos_flag) {
 			dx = _X - selected_pile.x;
 			if (selected_pile instanceof DiscardPile)
 				dy = _Y - (selected_pile.y);
 			else
-				dy = _Y
-						- (selected_pile.y + 35 * (selected_pile._card_count));
+				dy = _Y - (selected_pile.y + 35 * (selected_pile._card_count));
 			pos_flag = false;
 		}
 	}
-	
+
 	@Override
 	public void paint(final Graphics g) {
+
+		if (_is_win) {
+			drawWinMsg(g);
+			return;
+		}
+
 		for (int i = 0; i < 13; i++)
 			allPiles[i].display(g);
-
-		if (_is_win)
-			drawWinMsg();
 
 		if (!selected_cards.isEmpty()) {
 			calcDifXY();
