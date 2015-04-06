@@ -87,8 +87,8 @@ class CardPile {
 		if (firstCard != null) {
 			result = firstCard;
 			firstCard = firstCard.link;
+			_card_count--;
 		}
-		_card_count--;
 		return result;
 	}
 
