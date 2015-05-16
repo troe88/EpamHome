@@ -7,8 +7,8 @@ public class StrFlyWeight {
 	
 	public static void main(final String[] args) {
 		System.out.println(a == b);
-		A a = new A();
-		B b = new B();
+//		A a = new A();
+//		B b = new B();
 		
 	}
 	
