@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-class CardPile {
+public class CardPile {
 
 	protected Card firstCard;
 

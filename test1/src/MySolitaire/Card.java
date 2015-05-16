@@ -5,7 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-class Card {
+import MySolitaire.pokerCombs.Rank;
+import MySolitaire.pokerCombs.Suit;
+
+public class Card {
 	final static int black = 1;
 	final static int red = 0;
 
@@ -24,7 +27,9 @@ class Card {
 	// data fields
 	private boolean faceup;
 	private int rank;
+	Rank _rank;
 	private int suit;
+	Suit _suit;
 
 	private boolean _selected;
 	private boolean _can_get;
@@ -39,14 +44,23 @@ class Card {
 
 	Card link;
 
+	public Card(final int a) {
+	}
 	// constructor
-	Card(final int suitValue, final int rankValue) {
+	public Card(final int suitValue, final int rankValue) {
 		_can_get = false;
 		suit = suitValue;
 		rank = rankValue;
 		faceup = false;
 		_selected = false;
 	}
+
+	public Card(final Suit suit, final Rank rank) {
+		this(suit.getSuit(), rank.getRank());
+		_rank = rank;
+		_suit = suit;
+	}
+
 
 	public int color() {
 		if (getSuit() == heart || getSuit() == diamond) {
@@ -142,8 +156,8 @@ class Card {
 		return suit;
 	}
 
-	final boolean isAce() {
-		return getRank() == 0;
+	final public boolean isAce() {
+		return getRank() == 1;
 	}
 
 	final boolean isKing() {
@@ -157,4 +171,10 @@ class Card {
 	public void setSelected(final boolean selected) {
 		_selected = selected;
 	}
+	
+	@Override
+	public String toString() {
+		return _rank.toString() + " " + _suit.toString();
+	}
+	
 }
