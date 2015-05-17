@@ -13,6 +13,9 @@ public class CombsCheck2 {
 
 	PokerCombs check(final List<Card> in) {
 
+		if(in.size() != 5)
+			throw new IllegalArgumentException();
+		
 		sortRank(in);
 		sortSuit(in);
 
@@ -36,29 +39,6 @@ public class CombsCheck2 {
 			return PokerCombs.ONE_PAIR;
 
 		return PokerCombs.HIGH_HAND;
-
-		// PokerCombs result = PokerCombs.HIGH_HAND;
-		//
-		// if (twoPair())
-		// result = PokerCombs.TWO_PAIRS;
-		// if (onePair())
-		// result = PokerCombs.ONE_PAIR;
-		// if (threeKind())
-		// result = PokerCombs.THREE_KIND;
-		// if (straight())
-		// result = PokerCombs.STRAIGHT;
-		// if (flush())
-		// result = PokerCombs.FLUSH;
-		// if (fullHouse())
-		// result = PokerCombs.FULL_HOUSE;
-		// if (fourKind())
-		// result = PokerCombs.FOUR_KIND;
-		// if (straightFlush())
-		// result = PokerCombs.STRAIGHT_FLUSH;
-		// if (royalFlush())
-		// result = PokerCombs.ROYAL_FLUSH;
-		//
-		// return result;
 	}
 
 	private boolean somePair(final int some_card_kind) {
