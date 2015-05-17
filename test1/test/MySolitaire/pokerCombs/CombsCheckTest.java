@@ -67,4 +67,16 @@ public class CombsCheckTest {
 			
 	}
 	
+	@Test
+	public void checkNoSF2() {
+		check.addCard(new Card(Suit.HEART, Rank.TWO));
+		check.addCard(new Card(Suit.HEART, Rank.THREE));
+		check.addCard(new Card(Suit.HEART, Rank.TEN));
+		check.addCard(new Card(Suit.HEART, Rank.FIVE));
+		check.addCard(new Card(Suit.HEART, Rank.SIX));
+		
+		if(check.combs.contains(PokerCombs.STRAIGHT_FLUSH))
+			fail();
+			
+	}
 }

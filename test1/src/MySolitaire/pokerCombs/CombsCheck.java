@@ -162,10 +162,10 @@ public class CombsCheck {
 		CombsCheck check = new CombsCheck();
 		
 		check.addCard(new Card(Suit.HEART, Rank.KING));
-		check.addCard(new Card(Suit.HEART, Rank.ICE));
+		check.addCard(new Card(Suit.HEART, Rank.ICE ));
 		check.addCard(new Card(Suit.HEART, Rank.LADY));
 		check.addCard(new Card(Suit.HEART, Rank.JACK));
-		check.addCard(new Card(Suit.HEART, Rank.TEN));
+		check.addCard(new Card(Suit.HEART, Rank.TEN ));
 		
 //		check.addCard(new Card(Suit.HEART, Rank.FOUR));
 //		check.addCard(new Card(Suit.DIAMOND, Rank.FOUR));
